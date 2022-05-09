@@ -1,34 +1,22 @@
-#!/usr/bin/env python
+import requests
+import time
 
-import http.client
-import sys
+def run():
+    counter = 0
+    while True:
+        try:
+            start = time.time()
+            response = requests.get("http://localhost:8000")
+            counter = response.text
 
-PORT = 8000
-conn = http.client.HTTPConnection('localhost', port=PORT)
-
-if __name__ == "__main__":
-    conn.request("GET", "/")
-
-    rsp = conn.getresponse()
-    
-    #print server response and data
-    print(rsp.status, rsp.reason)
-    data_received = rsp.read()
-    print(data_received)
-# # while True:
-#     try:
-#         #request command to server
-#         conn.request("GET", "/")
-
-#         rsp = conn.getresponse()
+            if int(counter) % 10 == 0:
+                print("%4f: resp=%s " % (time.time() - start, counter))
         
-#         #print server response and data
-#         print(rsp.status, rsp.reason)
-#         data_received = rsp.read()
-#         print(data_received)
-#     except KeyboardInterrupt:
-#         print("KeyboardInterrupt")
-#         # break
+        except KeyboardInterrupt:
+            print("KeyboardInterrupt")
+            exit()
 
-#     conn.close()
-
+if __name__ == "__main__" :
+    response = requests.get("http://localhost:8000")
+    # print(response.text)
+    run()
